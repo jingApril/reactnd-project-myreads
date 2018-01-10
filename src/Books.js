@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import escapeRegExp from 'escape-string-regexp'
 
 class Books extends React.Component {
-
+    //const {books} = this.props;
+    //const {query} = this.state;
     static propTypes = {
         books: PropTypes.array.isRequired
     }
@@ -17,18 +18,17 @@ class Books extends React.Component {
         this.setState({query: ''})
     }
 
+
     render() {
 
-        const {books} = this.props
-        const {query} = this.state
+      let showingBooks
+      if (query) {
+          const match = new RegExp(escapeRegExp(query), 'i')
+          showingBooks = books.filter((book) => match.test(this.props.book.name))
+      } else {
+          showingContacts = books
+      }
 
-        let showingBooks
-        if (query) {
-            const match = new RegExp(escapeRegExp(query), 'i')
-            showingBooks = books.filter((contact) => match.test(contact.name))
-        } else {
-            showingBooks = books
-        }
         return (
           <ol className="books-grid">
             {
@@ -39,7 +39,7 @@ class Books extends React.Component {
                                 <div className="book-cover" style={{
                                         width: 128,
                                         height: 174,
-                                        backgroundImage: `url(${item.imageLinks})`
+                                        backgroundImage: `url(${item.imageLinks.thumbnail})`
                                     }}></div>
                                     {console.log(item)}
                                 <div className="book-shelf-changer">
@@ -57,8 +57,9 @@ class Books extends React.Component {
                         </div>
                     </li>
                 ))
-            }            
+            }
         </ol>
+
       )
     }
 }
