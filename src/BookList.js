@@ -1,12 +1,14 @@
 import React from 'react';
 
 class BookList extends React.Component {
-
+    state = {}
     render() {
+      
         return (
             <ol className="books-grid">
                 {
-                    this.props.books.map((book) => (<li key={book.id}>
+                    this.props.books.map((book) => (
+                      <li key={book.id}>
                         <div className="book">
                             <div className="book-top">
                                 <div className="book-cover" style={{
@@ -17,7 +19,7 @@ class BookList extends React.Component {
                                 <div className="book-shelf-changer">
                                     <select
                                         value={book.shelf}
-                                        onChange={(event) => this.props.onChange(book,event.target.value)}
+                                        onChange={(event) => this.props.onChange(book, event.target.value)}
                                     >
                                         <option value="none" disabled="disabled">Move to...</option>
                                         <option value="currentlyReading">Currently Reading</option>
@@ -30,7 +32,8 @@ class BookList extends React.Component {
                             <div className="book-title">{book.title}</div>
                             <div className="book-authors">{book.authors}</div>
                         </div>
-                    </li>))
+                    </li>
+                  ))
                 }
             </ol>
       )

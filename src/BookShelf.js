@@ -1,52 +1,75 @@
 import React from 'react';
+import { Route } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import BookShelfList from './BookShelfList'
+import * as BooksAPI from './BooksAPI'
 
 class BookShelf extends React.Component {
-  state = {}
-   render() {
-     // console.log(this.props)
-      return (
-        <div className="bookshelf">
-            <h2 className="bookshelf-title"> {this.props.shelf}</h2>
-                <div className="bookshelf-books">
-                  <ol className="books-grid">
-                    {
-                      this.props.books.map((book) => (
-                            <li key={book.id}>
-                                <div className="book">
-                                    <div className="book-top">
-                                        <div className="book-cover" style={{
-                                              width: 128,
-                                              height: 174,
-                                              backgroundImage: `url(${book.imageLinks.thumbnail})`
-                                            }}>
-                                            </div>
-                                            {console.log(book)}
-                                        <div className="book-shelf-changer">
-                            <select
-                            value={book.shelf}
-                            onChange={(event) => this.props.onChange(book,event.target.value)}
-                            >
-                                            <option value="none" disabled="disabled">Move to...</option>
-                                            <option value="currentlyReading">Currently Reading</option>
-                                            <option value="wantToRead">Want to Read</option>
-                                            <option value="read">Read</option>
-                                            <option value="none">None</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="book-title">{book.title}</div>
-                                    <div className="book-authors">{book.authors}</div>
-                                </div>
-                            </li>
-                        ))
-                    }
-                </ol>
 
-                </div>
-        </div>
 
-    )
+  state = {
+    query: '',
+    books: [],
+    searchBooks: []
   }
-}
 
+  componentDidMount() {
+      BooksAPI.getAll().then((books) => {
+          this.setState({books})
+      })
+  }
+
+
+   onChangeStatus = (book, shelf) => {
+    let prevBooks = this.state.books
+    let newBook = book
+    newBook.shelf = shelf
+    this.setState((prevState) => {
+      books: (prevBooks.filter((b) => b.id !== newBook.id).concat(newBook))
+    })
+    console.log(this.state)
+    BooksAPI.update(newBook.id, shelf).then(console.log(BooksAPI.getAll()))
+  }
+
+  render() {
+    return(
+
+      <div className="list-books">
+          <div className="list-books-title">
+              <h1>MyReads</h1>
+          </div>
+          <div className="list-books-content">
+              <div>
+                  <Route render={() => (
+                      <BookShelfList
+                          shelf="Currently Reading"
+                          books={this.state.books.filter((book) => book.shelf === 'currentlyReading')}
+                          onChange={this.onChangeStatus}
+                      />
+                  )}/>
+                  <Route render={() => (
+                      <BookShelfList
+                          shelf="Want to Read"
+                          books={this.state.books.filter((book) => book.shelf === 'wantToRead')}
+                            onChange={this.onChangeStatus}
+                        />
+                  )}/>
+                  <Route render={() => (
+                      <BookShelfList
+                          shelf="Read"
+                          books={this.state.books.filter((book) => book.shelf === 'read')}
+                          onChange={this.onChangeStatus}
+                      />
+                  )}/>
+              </div>
+          </div>
+          <div className="open-search">
+              <Link to='/search'>
+                Add a book
+              </Link>
+          </div>
+      </div>
+    )
+}
+}
 export default BookShelf
