@@ -5,28 +5,12 @@ import BookList from './BookList'
 import * as BooksAPI from './BooksAPI'
 
 class SearchPage extends React.Component {
-
 	state = {
 		query: '',
 		books: [],
 		searchBooks: []
 	}
-
-	componentDidMount() {
-		BooksAPI.getAll().then((books) => {
-			this.setState({books})
-		})
-	}
-
-	onChangeStatus = (book, shelf) => {
-		let newBook = book
-		newBook.shelf = shelf
-		this.setState((prevState) => {
-			books : (prevState.books.filter((b) => b.id !== newBook.id).concat(newBook))
-		})
-		BooksAPI.update(newBook, shelf).then(console.log(BooksAPI.getAll()))
-	}
-
+	
 	updateQuery = (query) => {
 		this.setState({query: query.trim()});
 		this.searchBook(query);
@@ -36,7 +20,6 @@ class SearchPage extends React.Component {
 	clearQuery = () => {
 		this.setState({query: ''})
 	}
-
 	searchBook = (query) => {
 		BooksAPI.search(query, 20).then((books) => {
 			if (!books || books.error) {
@@ -62,7 +45,12 @@ class SearchPage extends React.Component {
 				</div>
 			</div>
 			<div className="search-books-results">
-				<Route render={() => (<BookList books={this.state.searchBooks} onChange={this.onChangeStatus}/>)}/>
+				<Route render={() => (
+					<BookList
+						books={this.state.searchBooks}
+						onChange={this.props.onChangeStatus}
+					/>
+				)}/>
 			</div>
 		</div>)
 	}
