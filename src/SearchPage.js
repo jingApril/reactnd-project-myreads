@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {Route} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import BookList from './BookList'
@@ -22,43 +22,32 @@ class SearchPage extends React.Component {
 		this.setState({query: ''})
 	}
 
-	onChangeStatus = (book, shelf) => {
-		let newBook = book
-		newBook.shelf = shelf
-		this.setState((prevState) => {
-			books : (prevState.books.filter((b) => b.id !== newBook.id).concat(newBook))
-		})
-		BooksAPI.update(newBook, shelf)
-	}
-
 	searchBook = (query) => {
 
 		BooksAPI.search(query,20).then((books) => {
-			if (!books || books.error) {
-				this.setState({searchBooks: []});
-			} else {
-			   this.setState({ searchBooks : books})
 
-			books.map((bookonSearch) => this.props.books.map( => (bookonShelf)
-					    {
-						 if(bookonShelf.id === bookonSearchk.id)
-						 {
-						 bookonShelf.shelf = bookonSearch.shelf
-						 }
-				        return bookonShelf
-			           }
-			 ))
-
-			}
+				if (!books || books.error) {
+					this.setState({searchBooks: []});
+				} else {
+				  this.setState({searchBooks : books})
+				}
 		})
-   }
+
+	}
 
 	render() {
-		const BooksOnShelf= this.props.books
-	    const BooksFromSearch= this.state.searchBooks
 
-
-        {console.log(BooksFromSearch)}
+		if(this.state.searchBooks !== []){
+			this.state.searchBooks.map((bookonSearch) => {
+			 this.props.books.map((bookonShelf) => {
+					if(bookonShelf.id === bookonSearch.id)
+					{
+						bookonSearch.shelf= bookonShelf.shelf
+						return bookonSearch
+					}
+				})
+			})
+		}
 		return (
 			<div className="search-books">
 				<div className="search-books-bar">
@@ -73,16 +62,22 @@ class SearchPage extends React.Component {
 					</div>
 				</div>
 				<div className="search-books-results">
-					<Route render={() => (
+					{/* <Route render={() => (
 						<BookList
 							books={this.state.searchBooks}
 							onChange={this.props.onChange}
 						/>
-					)}/>
+					)}/> */}
+
+					<BookList
+						books={this.state.searchBooks}
+						onChange={this.props.onChange}
+					/>
 				</div>
 			</div>
 		)
 	}
+
 }
 
 export default SearchPage

@@ -3,7 +3,7 @@ import {Route} from 'react-router-dom'
 import BookList from './BookList'
 
 class BookShelfList extends React.Component {
-
+  state = {}
   render() {
 		return (
 			<div className="bookshelf">

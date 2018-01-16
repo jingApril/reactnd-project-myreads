@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route} from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import SearchPage from './SearchPage'
 import BookShelf from './BookShelf'
 import * as BooksAPI from './BooksAPI'
@@ -38,7 +38,9 @@ class BooksApp extends React.Component {
 						onChange={(book, shelf) => {
 							this.onChangeStatus(book, shelf)
 							history.push('/')
-						}}/>
+						}}
+
+					/>
 				)}/>
 				<Route exact path='/' render={() => (
 					<BookShelf
