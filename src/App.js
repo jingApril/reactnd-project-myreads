@@ -28,15 +28,13 @@ class BooksApp extends React.Component {
 		BooksAPI.update(newBook, shelf)
 	}
 
-
-
 	render() {
 
 		return (
 			<div className="app">
 				<Route path='/search' render={({history}) => (
 					<SearchPage
-
+						books={this.state.books}
 						onChange={(book, shelf) => {
 							this.onChangeStatus(book, shelf)
 							history.push('/')
