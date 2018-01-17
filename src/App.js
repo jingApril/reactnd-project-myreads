@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom'
-import SearchPage from './SearchPage'
 import BookShelf from './BookShelf'
+import SearchPage from './SearchPage'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 
@@ -9,29 +9,35 @@ class BooksApp extends React.Component {
 
 	state = {
 		query: '',
-		books: [],
-		searchBooks: []
+		books: []
 	}
 
 	componentDidMount() {
 		BooksAPI.getAll().then((books) => {
-			this.setState({books})
+			this.setState({books : books})
 		})
 	}
 
 	onChangeStatus = (book, shelf) => {
-		let newBook = book
-		newBook.shelf = shelf
-		this.setState((prevState) => {
-			books : (prevState.books.filter((b) => b.id !== newBook.id).concat(newBook))
-		})
-		BooksAPI.update(newBook, shelf)
-	}
+		 let newBook = book
+		 newBook.shelf = shelf
+		 this.setState((state) => {
+		   books: (state.books.filter((b) => b.id !== newBook.id).concat(newBook))
+		 })
+		 BooksAPI.update(newBook, shelf).then(console.log(BooksAPI.getAll()))
+	 }
+
 
 	render() {
 
 		return (
 			<div className="app">
+				<Route  exact path='/' render={() => (
+					<BookShelf
+						books={this.state.books}
+						onChange={this.onChangeStatus}
+					/>
+				)}/>
 				<Route path='/search' render={({history}) => (
 					<SearchPage
 						books={this.state.books}
@@ -39,13 +45,6 @@ class BooksApp extends React.Component {
 							this.onChangeStatus(book, shelf)
 							history.push('/')
 						}}
-
-					/>
-				)}/>
-				<Route exact path='/' render={() => (
-					<BookShelf
-						books={this.state.books}
-						onChange={this.onChangeStatus}
 					/>
 				)}/>
 			</div>

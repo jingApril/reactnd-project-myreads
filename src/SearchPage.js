@@ -1,10 +1,15 @@
 import React from 'react'
 import {Route} from 'react-router-dom'
 import {Link} from 'react-router-dom'
+import PropTypes from 'prop-types'
 import BookList from './BookList'
 import * as BooksAPI from './BooksAPI'
 
 class SearchPage extends React.Component {
+	static propTypes = {
+	  books: PropTypes.array.isRequired,
+	  onChange: PropTypes.func.isRequired
+    }
 
 	state = {
 		query: '',
@@ -25,21 +30,20 @@ class SearchPage extends React.Component {
 	searchBook = (query) => {
 
 		BooksAPI.search(query,20).then((books) => {
-
-				if (!books || books.error) {
-					this.setState({searchBooks: []});
-				} else {
-				  this.setState({searchBooks : books})
-				}
+			if (!books || books.error) {
+				this.setState({searchBooks: []});
+			} else {
+			  this.setState({searchBooks : books})
+			}
 		})
 
 	}
 
 	render() {
 
-		if(this.state.searchBooks !== []){
-			this.state.searchBooks.map((bookonSearch) => {
-			 this.props.books.map((bookonShelf) => {
+		if(this.state.searchBooks !== []) {
+			 this.state.searchBooks.map((bookonSearch) => {
+			  this.props.books.map((bookonShelf) => {
 					if(bookonShelf.id === bookonSearch.id)
 					{
 						bookonSearch.shelf= bookonShelf.shelf
@@ -62,17 +66,14 @@ class SearchPage extends React.Component {
 					</div>
 				</div>
 				<div className="search-books-results">
-					{/* <Route render={() => (
+
+					<Route render={() => (
 						<BookList
 							books={this.state.searchBooks}
 							onChange={this.props.onChange}
 						/>
-					)}/> */}
+					)}/>
 
-					<BookList
-						books={this.state.searchBooks}
-						onChange={this.props.onChange}
-					/>
 				</div>
 			</div>
 		)
