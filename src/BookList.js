@@ -1,6 +1,8 @@
 import React from 'react';
 
 const BookList = (props) => {
+
+  //let books = props.books;
   return (
       <ol className="books-grid">
           {
@@ -37,6 +39,5 @@ const BookList = (props) => {
       </ol>
   );
 }
-
 
 export default BookList

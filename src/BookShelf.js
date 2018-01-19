@@ -3,7 +3,9 @@ import {Route} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 //import BookShelfList from './BookShelfList'
 
+
 const BookShelfList = (props) => {
+
   return (
       <div className="bookshelf">
           <h2 className="bookshelf-title">{props.shelf}</h2>
@@ -17,7 +19,7 @@ const BookShelfList = (props) => {
                                       <div className="book-cover" style={{
                                           width: 128,
                                           height: 174,
-                                              backgroundImage: `url(${book.imageLinks.thumbnail})`
+                                          backgroundImage: `url(${book.imageLinks.thumbnail})`
                                       }}>
                                       </div>
                                       <div className="book-shelf-changer">

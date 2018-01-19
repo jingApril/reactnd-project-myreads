@@ -21,12 +21,11 @@ class BooksApp extends React.Component {
 	onChangeStatus = (book, shelf) => {
 		 let newBook = book
 		 newBook.shelf = shelf
-		 this.setState((state) => {
-		   books: (state.books.filter((b) => b.id !== newBook.id).concat(newBook))
+		 this.setState({
+		   books: (this.state.books.filter((b) => b.id !== newBook.id).concat(newBook))
 		 })
 		 BooksAPI.update(newBook, shelf).then(console.log(BooksAPI.getAll()))
-	 }
-
+	}
 
 	render() {
 
@@ -43,7 +42,7 @@ class BooksApp extends React.Component {
 						books={this.state.books}
 						onChange={(book, shelf) => {
 							this.onChangeStatus(book, shelf)
-							history.push('/')
+							//history.push('/')
 						}}
 					/>
 				)}/>

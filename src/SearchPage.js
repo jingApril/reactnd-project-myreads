@@ -17,6 +17,11 @@ class SearchPage extends React.Component {
 		searchBooks: []
 	}
 
+	constructor(props) {
+		super(props);
+		this.state = { searchBooks: [] };
+    }
+
 	updateQuery = (query) => {
 		this.setState({query: query.trim()});
 		this.searchBook(query);
@@ -28,7 +33,6 @@ class SearchPage extends React.Component {
 	}
 
 	searchBook = (query) => {
-
 		BooksAPI.search(query,20).then((books) => {
 			if (!books || books.error) {
 				this.setState({searchBooks: []});
